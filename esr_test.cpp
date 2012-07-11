@@ -19,6 +19,12 @@
 #include <sys/ioctl.h>
 #include <net/if.h>
 
+// htons
+#include <arpa/inet.h>
+// sockaddr_ll import
+#include <netpacket/packet.h>
+#include <net/ethernet.h>
+
 // perror includes
 #include <stdio.h>
 #include <errno.h>
@@ -52,7 +58,7 @@ int main(int argc, char* argv[], char* envp[]) {
     }
     cout << "Interface Name: " << request.ifr_name << endl;
     cout << "Interface Index: " << request.ifr_ifindex << endl;
-
+    int index = request.ifr_ifindex;
     // set permiscous mode
     if (ioctl(socket_fd, SIOCGIFFLAGS, &request) == -1) {
         perror("get flags error");
@@ -63,6 +69,16 @@ int main(int argc, char* argv[], char* envp[]) {
     }
 
     cout << "user id: " << cuserid(NULL) << endl;
+
+    sockaddr_ll sock;
+    sock.sll_family = AF_PACKET;
+    sock.sll_protocol = htons(ETH_P_ALL);
+    sock.sll_ifindex = index;
+    sock.sll_pkttype = PACKET_OTHERHOST;
+    if (bind(socket_fd, (sockaddr*) &sock, sizeof(sock)) == -1) {
+        cout << strerror(errno) << endl;
+        perror("error during bind: ");
+    }
 
     exit(EXIT_SUCCESS);
 }
