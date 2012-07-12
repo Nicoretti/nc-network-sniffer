@@ -1,3 +1,3 @@
-duplicates bug
-icmpv6 shown as unkown bug
-pretty printing
+fix duplicates bug
+fix icmpv6 shown as unkown bug
+add pretty printing class
