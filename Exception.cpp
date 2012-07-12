@@ -33,12 +33,12 @@ Exception::Exception(Exception* cause) {
     this->_cause = cause;
 }
 
-const char* Exception::getMessageAsCString() {
+const char* Exception::GetMessageAsCString() {
 
     return this->_message->c_str();
 }
 
-std::string* Exception::getMessage() {
+std::string* Exception::GetMessage() {
 
     return this->_message;
 }

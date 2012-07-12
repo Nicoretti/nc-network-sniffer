@@ -46,13 +46,13 @@ int main(int argc, char* argv[], char* envp[]) {
     int socket_fd;
     // SOCK_DGRAM => Layer 2 header already removed and stored in struct
     // SOCK_RAW => Layer 2 header not removed
-    socket_fd = socket(AF_PACKET, SOCK_DGRAM, 0);
+    socket_fd = socket(AF_PACKET, SOCK_RAW, 0);
     if (socket_fd == -1) {
         perror("couldn't create socket: "); 
     }
 
     ifreq request;
-    strncpy(request.ifr_name, "eth0", IFNAMSIZ);
+    strncpy(request.ifr_name, "lo", IFNAMSIZ);
     if (ioctl(socket_fd, SIOCGIFINDEX, &request) == -1) {
         perror("get index error:");
     }
@@ -78,6 +78,27 @@ int main(int argc, char* argv[], char* envp[]) {
     if (bind(socket_fd, (sockaddr*) &sock, sizeof(sock)) == -1) {
         cout << strerror(errno) << endl;
         perror("error during bind: ");
+    }
+
+    while(true) {
+            sockaddr_ll packet_header;
+            packet_header.sll_family = AF_PACKET;
+            packet_header.sll_protocol = htons(ETH_P_ALL);
+            packet_header.sll_ifindex = index;
+            packet_header.sll_pkttype = PACKET_OTHERHOST;
+            int MTU = 1600;
+            uint8_t* buf = new uint8_t[MTU];
+            socklen_t sock_size= sizeof(packet_header); 
+            ssize_t msg_size = recvfrom(socket_fd, buf, MTU, 0, 
+                                       (sockaddr*) &packet_header, &sock_size);
+
+            cout << "msg - length: " << msg_size << endl;
+
+            for (int i = 0; i <= msg_size; i++) {
+                cout << " " << buf[i] << " ";
+            }
+            
+            cout << endl << endl;
     }
 
     exit(EXIT_SUCCESS);

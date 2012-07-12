@@ -56,12 +56,12 @@ public:
     /**
      * Returns Exception#_message as c string
      */
-    const char* getMessageAsCString();
+    const char* GetMessageAsCString();
 
     /**
      * Returns Exception#_message.
      */
-    std::string* getMessage();
+    std::string* GetMessage();
 
     /**
      * Cleans up the mess.
