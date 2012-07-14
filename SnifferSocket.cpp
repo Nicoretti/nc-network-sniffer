@@ -99,7 +99,8 @@ Message* SnifferSocket::ReceiveMessage() {
 }
 
 SnifferSocket::~SnifferSocket() {
-
+    
+    this->DisablePromiscuousMode();
     if (this->_ifname != NULL) { delete this->_ifname; }
 }
 

@@ -24,10 +24,15 @@ class Message {
 
 public:
 
-    enum PROTOCOL { IPv4, IPv6, ICMP, ICMPv6, TCP, UDP,  UNKNOWN };
+    enum PROTOCOL { ICMP, ICMPv6, TCP, UDP,  UNKNOWN };
 
 private:
 
+
+    static uint32_t _id_counter;
+
+    uint32_t _message_id;
+    
     uint8_t* _data_buffer;
 
     uint32_t _data_buffer_length;
@@ -41,23 +46,8 @@ private:
     uint8_t* _src_address;
 
     uint8_t* _dst_address;
-
-    PROTOCOL _layer3_protocol;
-
-    PROTOCOL _layer4_protocol;
-   
-    /**
-     * Extracts the layer 3 protocol type form the ethernet frame.
-     */
-    PROTOCOL ExtractLayer3Protocol(uint8_t* data_buffer);
-
-    /**
-     * Extracts the layer 4 protocol type form the ethernet frame.
-     *
-     * ICMP - will be handled as layer4 protocol, but it isn't
-     * a true layer 4 protocol.
-     */
-    PROTOCOL ExtractLayer4Protocol(uint8_t* data_buffer, PROTOCOL layer3_protocol);
+    
+    uint16_t _type;
 
 public: 
 
@@ -110,24 +100,30 @@ public:
     uint8_t* GetDestinationAddress(); 
 
     /**
-     * Gets the included layer 3 protocol of this message.
+     * Gets a byte from the payload. The paylaod index
+     * starts at 0 and ends with payloadlength -1.
+     *  
+     * @param index: of the byte to be retrieved.
+     *
+     * @return reference to the payload byte.
      */
-    PROTOCOL GetLayer3Protocol();
+    uint8_t& operator[](int index);
 
     /**
      * Gets the included layer 4 protocol of this message.
      */
-    PROTOCOL GetLayer4Protocol();
+    const char* GetLayer4Protocol();
 
     /**
-     * Gets the name as c string for a specified protocol.
-     *
-     * @param protocol: whose name will be determined.
-     *
-     * @return the name of the specified protocol, if 
-     * it can't determined the string "Unkown" is returned.
+     * Gets the protocol type contained in this 
+     * ethernet frame.
      */
-    const char* GetProtocolName(PROTOCOL protocol);
+    uint16_t GetType();
+
+    /**
+     * Gets the id of this message.
+     */
+    uint32_t GetMessageId();
     
     /**
      * Cleans up the mess.

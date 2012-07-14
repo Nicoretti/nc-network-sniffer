@@ -7,103 +7,48 @@
  */
 
 #include "Message.h"
+#include "Exception.h"
 #include <string.h>
 
-const char* Message::GetProtocolName(PROTOCOL protocol) {
+uint32_t Message::_id_counter = 1;
 
-    const char* protocol_name = NULL;
-    switch (protocol) {
+const char* Message::GetLayer4Protocol() {
 
-        case Message::IPv4:
-            protocol_name = "IPv4";
-            break;
-
-        case Message::IPv6:
-            protocol_name = "IPv6";
-            break;
-
-        case Message::ICMP:
-            protocol_name = "ICMP";
-            break;
-
-        case Message::ICMPv6:
-            protocol_name = "ICMPv6";
-            break;
-
-        case Message::TCP:
-            protocol_name = "TCP";
-            break;
-
-        case Message::UDP:
-            protocol_name = "UDP";
-            break;
-
-        default:
-            protocol_name = "Unknown";
-            break;
-    }
-
-    return protocol_name;
-}
-
-Message::PROTOCOL Message::ExtractLayer3Protocol(uint8_t* data_buffer) {
-
-    Message::PROTOCOL l3_protocol = Message::UNKNOWN;
-    uint16_t type = ((uint16_t) (data_buffer[12] << 8)) | ((uint16_t) data_buffer[13]);
-    switch (type) {
-
-        case 0x0800:
-            l3_protocol = Message::IPv4;
-            break;
-
-        case 0x86DD:
-            l3_protocol = Message::IPv6;
-            break;
-
-        default:
-            l3_protocol = Message::UNKNOWN;
-            break;
-    }
-
-    return l3_protocol;
-}
-
-
-Message::PROTOCOL Message::ExtractLayer4Protocol(uint8_t* data_buffer, Message::PROTOCOL layer3_protocol) {
-
-    Message::PROTOCOL l4_protocol = Message::UNKNOWN;
-    uint8_t type = 0x00;
+    const char* l4_protocol = NULL;
+    uint8_t l4_type_field;
     // select field which indicates the next higher protocol type
-    if (layer3_protocol == Message::IPv4) {
+    // 0x0800 = IPv4
+    if ( this->_type == 0x0800) {
 
-        type = data_buffer[23];
+       l4_type_field  = this->_data_buffer[23];
     }
-    else if (layer3_protocol == Message::IPv6) {
+    // 0x86DD = IPv6
+    else if (this->_type == 0x86DD) {
 
-        type = data_buffer[30];
+        l4_type_field = this->_data_buffer[30];
     }
 
     // determine protocol
-    switch (type) {
+    switch (l4_type_field) {
 
         case 0x01:
-            l4_protocol = Message::ICMP;
+            l4_protocol = "ICMP";
             break;
 
         case 0x06:
-            l4_protocol = Message::TCP;
+            l4_protocol = "TCP";
             break;
 
         case 0x11:
-            l4_protocol = Message::UDP;
+            l4_protocol = "UDP";
             break;
 
         case 0x3a:
-            l4_protocol = Message::ICMPv6;
+            l4_protocol = "ICMPv6";
             break;
 
         default:
-            l4_protocol = Message::UNKNOWN;
+            l4_protocol = "---";
             break;
     }
 
@@ -115,12 +60,19 @@ Message::Message(uint8_t* data_buffer, uint32_t buffer_length, uint32_t data_len
     this->_data_buffer = data_buffer;
     this->_data_buffer_length = buffer_length;
     this->_data_length = data_length;
-    this->_layer3_protocol = this->ExtractLayer3Protocol(data_buffer);
-    this->_layer4_protocol = this->ExtractLayer4Protocol(data_buffer, this->_layer3_protocol);
+    this->_payload = data_buffer + 14;
+    this->_payload_length = this->_data_length - 14;
+    this->_type = ((uint16_t) (data_buffer[12] << 8)) | ((uint16_t) data_buffer[13]);
+    this->_message_id = Message::_id_counter++;
     this->_src_address = new uint8_t[6];
     this->_dst_address = new uint8_t[6];
     (void) memcpy(this->_dst_address, data_buffer, 6);
     (void) memcpy(this->_src_address, data_buffer + 6, 6);
+}
+
+uint32_t Message::GetMessageId() {
+
+    return this->_message_id;
 }
 
 uint8_t* Message::GetDataBuffer() {
@@ -158,14 +110,19 @@ uint8_t* Message::GetDestinationAddress() {
     return this->_dst_address;
 }
 
-Message::PROTOCOL Message::GetLayer3Protocol() {
+uint8_t& Message::operator[](int index) {
 
-    return this->_layer3_protocol;
+    if (index >= (this->_payload_length)) {
+        
+        throw Exception("Index out of range");
+    }
+
+    return this->_payload[index];
 }
 
-Message::PROTOCOL Message::GetLayer4Protocol() {
+uint16_t Message::GetType() {
 
-    return this->_layer4_protocol;
+    return this->_type;
 }
 
 Message::~Message() {
