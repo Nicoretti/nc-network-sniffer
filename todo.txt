@@ -1,3 +1,0 @@
-fix duplicates bug
-fix icmpv6 shown as unkown bug
-add pretty printing class
