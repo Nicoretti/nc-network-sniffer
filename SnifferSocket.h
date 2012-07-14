@@ -39,6 +39,18 @@ private:
 
     std::string* _ifname;
 
+
+    /**
+     * Checks wether this is a a local generated packet with itself as destination.
+     *
+     * @param buffer: raw data of the ethernet packet.
+     * @param buffer_size: size of the raw data buffer.
+     *
+     * @return: <code>true</code> if it is a local to local packet,
+     *          otherwise <code>false</code>.
+     */
+    bool IsLocalToLocal(uint8_t* buffer, uint32_t buffer_size);
+
     /**
      * Creates a new socket which will be used for this sniffer socket.
      *

@@ -45,6 +45,7 @@ int main(int argc, char* argv[], char* envp[]) {
         // no interface supplied on cmd
         else {
 
+            cerr << "No network interface specified!" << endl;
             PrintUsage();
             exit(EXIT_FAILURE);
         }
@@ -60,5 +61,5 @@ void PrintUsage() {
 
     cout << "Usage: sniffer INTERFACE" << endl;
     cout << "A simple network sniffer" << endl;
-    cout << endl << endl << "version 0.1.0, Nicola Coretti" << endl;
+    cout << endl << "version 0.1.0, Nicola Coretti" << endl;
 }

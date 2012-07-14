@@ -77,6 +77,11 @@ void SnifferSocket::DisablePromiscuousMode() {
     }
 }
 
+bool SnifferSocket::IsLocalToLocal(uint8_t* buffer, uint32_t buffer_size) {
+
+    return (memcmp(buffer, buffer + 6, 6) == 0) ? true : false; 
+}
+
 Message* SnifferSocket::ReceiveMessage() {
 
     sockaddr_ll pkt_hdr;
@@ -90,6 +95,13 @@ Message* SnifferSocket::ReceiveMessage() {
     socklen_t pkt_hdr_size = sizeof(pkt_hdr);
     ssize_t msg_size = recvfrom(this->_socket_fd, buffer, buffer_size, 0,
                                 (sockaddr*) &pkt_hdr, &pkt_hdr_size); 
+    
+    if (this->IsLocalToLocal(buffer, buffer_size)) {
+        // local to local packet will be seen twice by the device
+        // therefore one will be discarded.
+        msg_size = recvfrom(this->_socket_fd, buffer, buffer_size, 0,
+                                (sockaddr*) &pkt_hdr, &pkt_hdr_size); 
+    }
     if (msg_size == -1) {
         throw Exception("Couldn't read from socket");
     }

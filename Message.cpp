@@ -25,7 +25,7 @@ const char* Message::GetLayer4Protocol() {
     // 0x86DD = IPv6
     else if (this->_type == 0x86DD) {
 
-        l4_type_field = this->_data_buffer[30];
+        l4_type_field = this->_data_buffer[20];
     }
 
     // determine protocol
