@@ -87,7 +87,7 @@ void PrettyPrinter::PrintPayloadLine(uint8_t* bytes, uint16_t byte_count) {
 		uint32_t space = (16 - byte_count);
 		for (uint16_t i = 0; i < space; i++) {
 
-        	cout << "--" << " ";
+        	cout << "  " << " ";
 		}
     }
     cout << setw(4) << setfill(' ') << " ";
