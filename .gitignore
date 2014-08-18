@@ -3,3 +3,4 @@
 *.o
 test
 sniffer
+.bake
