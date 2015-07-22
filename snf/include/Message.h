@@ -107,7 +107,7 @@ public:
      *
      * @return reference to the payload byte.
      */
-    uint8_t& operator[](int index);
+    uint8_t& operator[](uint32_t index);
 
     /**
      * Gets the included layer 4 protocol of this message.

@@ -110,7 +110,7 @@ uint8_t* Message::GetDestinationAddress() {
     return this->_dst_address;
 }
 
-uint8_t& Message::operator[](int index) {
+uint8_t& Message::operator[](uint32_t index) {
 
     if (index >= (this->_payload_length)) {
         
