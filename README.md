@@ -19,7 +19,7 @@ A Make and a Bake based build is suppored.
 ## Usage
 **Attention:** requires root privileges.
 
-  `snf INTERFACE` 
+    `snf INTERFACE` 
   
 Example (Sniff trafic on eth0): 
 
