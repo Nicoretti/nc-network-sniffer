@@ -10,7 +10,7 @@
 
 ## Usage
 
-** Attention: ** requires root privileges.
+**Attention:** requires root privileges.
 
   snf INTERFACe
   
