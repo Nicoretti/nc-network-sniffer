@@ -28,7 +28,53 @@
 
     <div class="container">
       <section id="main_content">
-        <p>A simple network sniffer (snf).</p>
+        <h1>
+<a id="a-simple-network-sniffer-for-linux" class="anchor" href="#a-simple-network-sniffer-for-linux" aria-hidden="true"><span class="octicon octicon-link"></span></a>A simple network sniffer for Linux</h1>
+
+<p>(see also <a href="http://nicoretti.github.io/nc-network-sniffer/">http://nicoretti.github.io/nc-network-sniffer/</a>)</p>
+
+<h2>
+<a id="build" class="anchor" href="#build" aria-hidden="true"><span class="octicon octicon-link"></span></a>Build</h2>
+
+<p>A Make and a Bake based build is suppored.</p>
+
+<h3>
+<a id="make-based-build" class="anchor" href="#make-based-build" aria-hidden="true"><span class="octicon octicon-link"></span></a>Make based build</h3>
+
+<ul>
+<li>Run make based build
+<code>make</code>
+</li>
+<li>executable can be found at /out/sniffer</li>
+</ul>
+
+<h3>
+<a id="bake-based-build" class="anchor" href="#bake-based-build" aria-hidden="true"><span class="octicon octicon-link"></span></a>bake based build</h3>
+
+<ul>
+<li>Install the bake build tool 
+<code>gem install bake-toolkit</code>
+</li>
+<li>Run bake based build in nc-network-sniffer directory
+<code>bake Debug -v2 -a black</code>
+</li>
+<li>executable can be found at /Debug/sniffer</li>
+</ul>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p><strong>Attention:</strong> requires root privileges.</p>
+
+<p><code>snf INTERFACE</code> </p>
+
+<p>Example (Sniff trafic on eth0): </p>
+
+<pre><code>`sniffer eth0`
+</code></pre>
+
+<h2>
+<a id="screenshots" class="anchor" href="#screenshots" aria-hidden="true"><span class="octicon octicon-link"></span></a>Screenshots</h2>
 
 <p><img src="https://github.com/Nicoretti/nc-network-sniffer/blob/master/res/scan_output.png?raw=true" alt="scan output"></p>
       </section>
