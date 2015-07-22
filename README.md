@@ -12,7 +12,7 @@
 
 **Attention:** requires root privileges.
 
-  snf INTERFACe
+  `snf INTERFACE`
   
   
 
