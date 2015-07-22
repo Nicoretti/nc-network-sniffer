@@ -3,7 +3,7 @@ Project {
 
 		Files "**/*.cpp"
 		IncludeDir "snf/include"
-		ArtifactName "nc_network_sniffer.exe"
+		ArtifactName "sniffer"
 		DefaultToolchain GCC {
 			Compiler CPP {
 				Flags "-O0 -g3 -Wall -fmessage-length=0"
