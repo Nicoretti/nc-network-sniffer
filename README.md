@@ -1,6 +1,9 @@
 # A simple network sniffer for Linux
 (see also http://nicoretti.github.io/nc-network-sniffer/)
 
+## Screenshots
+![scan output](https://github.com/Nicoretti/nc-network-sniffer/blob/master/res/scan_output.png?raw=true)
+
 ## Build  
 A Make and a Bake based build is suppored.
 
